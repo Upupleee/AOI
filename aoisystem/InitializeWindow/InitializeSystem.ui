@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>347</width>
+    <height>409</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AOI检测系统</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCheckBox" name="checkBox_carema">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>相机</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_carema">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QCheckBox" name="checkBox_acs">
+          <property name="text">
+           <string>ACS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_acs">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="2">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1">
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>347</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <widget class="QMenu" name="file_menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="ImportPicture_action"/>
+    <addaction name="separator"/>
+    <addaction name="ImportGerber_action"/>
+    <addaction name="separator"/>
+    <addaction name="QuickStart_action"/>
+    <addaction name="separator"/>
+    <addaction name="Save_action"/>
+    <addaction name="separator"/>
+    <addaction name="SaveAs_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="window_menu">
+    <property name="title">
+     <string>窗口</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="Max_action"/>
+    <addaction name="separator"/>
+    <addaction name="Min_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="help_menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="About_action"/>
+    <addaction name="separator"/>
+    <addaction name="Log_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="close_menu">
+    <property name="title">
+     <string>关闭</string>
+    </property>
+    <addaction name="Close_action"/>
+   </widget>
+   <widget class="QMenu" name="set_menu">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="ConfigSet_action"/>
+    <addaction name="separator"/>
+    <addaction name="System_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="data_menu">
+    <property name="title">
+     <string>数据</string>
+    </property>
+    <addaction name="ShowData_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="file_menu"/>
+   <addaction name="window_menu"/>
+   <addaction name="data_menu"/>
+   <addaction name="set_menu"/>
+   <addaction name="help_menu"/>
+   <addaction name="close_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="Max_action">
+   <property name="text">
+    <string>最大化</string>
+   </property>
+  </action>
+  <action name="Min_action">
+   <property name="text">
+    <string>最小化</string>
+   </property>
+  </action>
+  <action name="ImportPicture_action">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>导入图片</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
+  </action>
+  <action name="ImportGerber_action">
+   <property name="text">
+    <string>导入GerBer图片</string>
+   </property>
+  </action>
+  <action name="Save_action">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="SaveAs_action">
+   <property name="text">
+    <string>另存为</string>
+   </property>
+  </action>
+  <action name="Close_action">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="About_action">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="ConfigSet_action">
+   <property name="text">
+    <string>参数设置</string>
+   </property>
+  </action>
+  <action name="ShowData_action">
+   <property name="text">
+    <string>数据表格</string>
+   </property>
+  </action>
+  <action name="Log_action">
+   <property name="text">
+    <string>日志</string>
+   </property>
+  </action>
+  <action name="QuickStart_action">
+   <property name="text">
+    <string>快速开始</string>
+   </property>
+  </action>
+  <action name="System_action">
+   <property name="text">
+    <string>系统设置</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="3" margin="3"/>
+ <layoutfunction spacing="3" margin="3"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>Max_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showMaximized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Min_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Close_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

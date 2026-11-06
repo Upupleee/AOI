@@ -1,0 +1,109 @@
+XHOME:
+WAIT 500
+! The program executes the following sequence:
+! - Move to the left limit switch.
+! - Wait for the left limit release 
+! - Move to the encoder index.
+! - Set the AXIS_0 origin to the position of index.
+! - Move to the origin. 
+
+!********************************************************************************
+real Search_Vel
+INT bCompensate
+bCompensate=1
+
+ MFLAGS (AXIS_0).#DEFCON  =1
+Search_Vel = 10;
+GLOBAL REAL AXIS_0_ERR( 18 )
+AXIS_0_ERR(0)=	0
+AXIS_0_ERR(1)=	-0.000675
+AXIS_0_ERR(2)=	-0.0014
+AXIS_0_ERR(3)=	-0.002625
+AXIS_0_ERR(4)=	-0.000225
+AXIS_0_ERR(5)=	-0.000725
+AXIS_0_ERR(6)=	0.0009
+AXIS_0_ERR(7)=	-0.0018
+AXIS_0_ERR(8)=	-0.00005
+AXIS_0_ERR(9)=	-0.002475
+AXIS_0_ERR(10)=	-0.003975
+AXIS_0_ERR(11)=	-0.003775
+AXIS_0_ERR(12)=	-0.00325
+AXIS_0_ERR(13)=	-0.0038
+AXIS_0_ERR(14)=	-0.006725
+AXIS_0_ERR(15)=	-0.00785
+AXIS_0_ERR(16)=	-0.010
+AXIS_0_ERR(17)=	-0.00915
+				
+MFLAGS(AXIS_0).#ENMOD = 1
+ENTIME(AXIS_0) = 0
+MFLAGS(AXIS_0).#OPEN=1
+CERRI(AXIS_0) = 100
+WAIT 1000
+DISABLE (AXIS_0)
+TILL ^MST(AXIS_0).#ENABLED
+WAIT 1000
+ENABLE (AXIS_0)
+TILL MST(AXIS_0).#ENABLED
+WAIT 8000
+
+MFLAGS(AXIS_0).#OPEN=0
+CERRI(AXIS_0) = 3
+
+!*******************************************************************
+! Set Motion parameters for homing 
+VEL(AXIS_0)= Search_Vel*2;
+ACC(AXIS_0) = 50*VEL(AXIS_0); 
+DEC(AXIS_0) = ACC(AXIS_0);
+JERK(AXIS_0) = 10*ACC(AXIS_0); 
+KDEC(AXIS_0) = 1000;
+!*******************************************************************
+FDEF(AXIS_0).#LL=0;       ! Disable the AXIS_0 left limit default response
+FDEF(AXIS_0).#RL=0;       ! Disable the AXIS_0 right limit default response
+FDEF(AXIS_0).#SRL=0; 
+FDEF(AXIS_0).#SLL=0; 
+!*******************************************************************
+MFLAGS(AXIS_0).#DEFCON=1   
+DISABLE (AXIS_0)
+TILL ^MST(AXIS_0).#ENABLED
+WAIT 1000
+ENABLE (AXIS_0);         ! Enable the AXIS_0 drive
+TILL MST(AXIS_0).#ENABLED;
+WAIT 2000;
+
+JOG (AXIS_0),-;           ! Move to the left limit switch 
+TILL FAULT(AXIS_0).#LL ! Wait for the   limit switch activation
+KILL AXIS_0
+TILL ^MST(AXIS_0).#MOVE
+VEL(AXIS_0)= Search_Vel
+IST(AXIS_0).#IND=1
+IST(AXIS_0).#IND=0;       ! Reset the index flag - activate index circuit
+JOG (AXIS_0),+;           ! Move to the encoder index
+
+TILL IST(AXIS_0).#IND;     ! Wait for crossing the index
+WAIT 100
+SET FPOS(AXIS_0)=FPOS(AXIS_0)-IND(AXIS_0)+24.5;  ! Set AXIS_0 origin to the position of index = zero
+PTP/E (AXIS_0),0;   ! Move to the origin
+TILL ^MST(AXIS_0).#MOVE          
+
+CERRI(AXIS_0) = 0.1
+
+FMASK(AXIS_0).#RL=1;
+FMASK(AXIS_0).#LL=1; 
+FDEF(AXIS_0).#SRL=160; 
+FDEF(AXIS_0).#SLL=0;
+FDEF(AXIS_0).#RL=1;      ! Enable the AXIS_0 right limit default response
+FDEF(AXIS_0).#LL=1;      ! Enable the AXIS_0 left limit default response
+
+IF ( bCompensate )
+MFLAGS (AXIS_0).#DEFCON  = 0 ; 
+CONNECT RPOS (AXIS_0) = APOS(AXIS_0)+ MAP ( APOS(AXIS_0),AXIS_0_ERR, 0, 10 );
+DEPENDS (AXIS_0), (AXIS_0) ;
+END
+
+VEL(AXIS_0)= 300;
+ACC(AXIS_0) = 4000; 
+DEC(AXIS_0) = 4000;
+JERK(AXIS_0) = 10000; 
+KDEC(AXIS_0) = 10000;
+
+STOP

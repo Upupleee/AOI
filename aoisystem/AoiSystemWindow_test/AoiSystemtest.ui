@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1159</width>
+    <height>823</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AOI检测系统</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="7,4">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="9,0,1">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+          <item>
+           <layout class="QVBoxLayout" name="A_verticalLayout" stretch="1,19,1,1">
+            <item>
+             <layout class="QVBoxLayout" name="Atoolbar_verticalLayout">
+              <item>
+               <widget class="QWidget" name="Atoolbar_widget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGraphicsView" name="graphicsView_left">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>464</width>
+                <height>460</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>464</width>
+                <height>460</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="lineWidth">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="AprogressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="A_label">
+              <property name="text">
+               <string>A面</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="B_verticalLayout" stretch="1,19,1,1">
+            <item>
+             <layout class="QVBoxLayout" name="Btoolbar_verticalLayout">
+              <item>
+               <widget class="QWidget" name="Btoolbar_widget" native="true"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGraphicsView" name="graphicsView_right">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>464</width>
+                <height>460</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>464</width>
+                <height>460</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="lineWidth">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="BprogressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="B_label">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>B面</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>13</width>
+            <height>13</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,7,3">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>检测线程选择：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="inference_comboBox">
+            <item>
+             <property name="text">
+              <string>整图批量推理</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>整图非批量推理</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>单条带批量推理</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1">
+            <item>
+             <spacer name="verticalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>检测模式：</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="mode_combo">
+                <item>
+                 <property name="text">
+                  <string>A</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>B</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>AB</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="lock_ab_checkbox">
+              <property name="text">
+               <string>锁定AB模式</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="only_sample_checkBox">
+              <property name="text">
+               <string>只采图</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="auto_confirm_checkbox">
+              <property name="text">
+               <string>自动确认</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="SorptionButton">
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color: gray&quot;</string>
+              </property>
+              <property name="text">
+               <string>吸附</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="StartSampleButton">
+                <property name="styleSheet">
+                 <string notr="true">&quot;background-color: gray&quot;</string>
+                </property>
+                <property name="text">
+                 <string>开始采像</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="StartDetectionButton">
+                <property name="styleSheet">
+                 <string notr="true">&quot;background-color: gray&quot;</string>
+                </property>
+                <property name="text">
+                 <string>开始检测</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="ResetButton">
+              <property name="text">
+               <string>复位</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="AlarmRestButton">
+              <property name="text">
+               <string>重置报警</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>光源</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox">
+              <property name="maximum">
+               <number>999</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,1,1,1,1">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_temperature">
+              <property name="text">
+               <string>温度：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_wetness">
+              <property name="text">
+               <string>湿度：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_pressure">
+              <property name="text">
+               <string>负压：</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>扫描记录</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="boardTable">
+            <column>
+             <property name="text">
+              <string>扫描ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>面</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>扫描时间</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>操作</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>资料料号</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="materialTable">
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderStretchLastSection">
+             <bool>false</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>料号</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>A面</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>B面</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1159</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <widget class="QMenu" name="window_menu">
+    <property name="title">
+     <string>窗口</string>
+    </property>
+    <addaction name="Max_action"/>
+    <addaction name="separator"/>
+    <addaction name="Min_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="help_menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="About_action"/>
+    <addaction name="separator"/>
+    <addaction name="Log_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="exit_menu">
+    <property name="title">
+     <string>关闭</string>
+    </property>
+    <addaction name="Close_action"/>
+   </widget>
+   <widget class="QMenu" name="setting_menu">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="System_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="viewer_menu">
+    <property name="title">
+     <string>查看</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="Viewer_action"/>
+   </widget>
+   <addaction name="viewer_menu"/>
+   <addaction name="setting_menu"/>
+   <addaction name="window_menu"/>
+   <addaction name="help_menu"/>
+   <addaction name="exit_menu"/>
+  </widget>
+  <action name="Max_action">
+   <property name="text">
+    <string>最大化</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="Min_action">
+   <property name="text">
+    <string>最小化</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="ImportPicture_action">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>导入采样列表</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
+  </action>
+  <action name="ImportGerber_action">
+   <property name="text">
+    <string>导入GerBer图片</string>
+   </property>
+  </action>
+  <action name="Save_action">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="SaveAs_action">
+   <property name="text">
+    <string>另存为</string>
+   </property>
+  </action>
+  <action name="Close_action">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="About_action">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="ConfigSet_action">
+   <property name="text">
+    <string>参数设置</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
+   </property>
+  </action>
+  <action name="ShowData_action">
+   <property name="text">
+    <string>数据表格</string>
+   </property>
+  </action>
+  <action name="Log_action">
+   <property name="text">
+    <string>日志</string>
+   </property>
+  </action>
+  <action name="ImportGerberList_action">
+   <property name="text">
+    <string>导入模板列表</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Return</string>
+   </property>
+  </action>
+  <action name="System_action">
+   <property name="text">
+    <string>系统设置</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>重置大小</string>
+   </property>
+  </action>
+  <action name="ZoomInActionSample">
+   <property name="text">
+    <string>sample</string>
+   </property>
+   <property name="shortcut">
+    <string>F6, S</string>
+   </property>
+  </action>
+  <action name="ZoomInActionTemplate">
+   <property name="text">
+    <string>template</string>
+   </property>
+   <property name="shortcut">
+    <string>F6, T</string>
+   </property>
+  </action>
+  <action name="ZoomOutActionSample">
+   <property name="text">
+    <string>sample</string>
+   </property>
+   <property name="shortcut">
+    <string>F7, S</string>
+   </property>
+  </action>
+  <action name="ZoomOutActionTemplate">
+   <property name="text">
+    <string>template</string>
+   </property>
+   <property name="shortcut">
+    <string>F7, T</string>
+   </property>
+  </action>
+  <action name="FitToWinActionSample">
+   <property name="text">
+    <string>sample</string>
+   </property>
+   <property name="shortcut">
+    <string>F8, S</string>
+   </property>
+  </action>
+  <action name="FitToWinActionTemplate">
+   <property name="text">
+    <string>template</string>
+   </property>
+   <property name="shortcut">
+    <string>F8, T</string>
+   </property>
+  </action>
+  <action name="ResetZoomActionSample">
+   <property name="text">
+    <string>sample</string>
+   </property>
+   <property name="shortcut">
+    <string>F9, S</string>
+   </property>
+  </action>
+  <action name="ResetZoomActionTemplate">
+   <property name="text">
+    <string>template</string>
+   </property>
+   <property name="shortcut">
+    <string>F9, T</string>
+   </property>
+  </action>
+  <action name="Viewer_action">
+   <property name="text">
+    <string>图片查看器</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="3" margin="3"/>
+ <layoutfunction spacing="3" margin="3"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>Max_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showMaximized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Min_action</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

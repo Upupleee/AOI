@@ -1,0 +1,12 @@
+{
+    "task": "detect",
+    "names": [
+        "missing",
+        "excess"
+    ],
+    "imgsz": [
+        640,
+        640
+    ],
+    "half": false
+}

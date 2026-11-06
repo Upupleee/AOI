@@ -1,0 +1,87 @@
+# AOI 系统全局配置
+# 所有硬编码的连接参数、路径、地址集中在此文件管理
+
+# 硬件连接
+hardware:
+  plc:
+    ip: "20.0.0.200"
+    port: 502
+  acs:
+    ip: "10.0.0.100"
+    port: 701
+
+# 文件路径 (Linux 生产环境)
+paths:
+  material_root: "material"
+  temp_images: "/home/aoi/pretest/images"
+  ccf_file: "/home/aoi/Documents/best_0429.ccf"
+  motion_settings_ini: "/home/aoi/pretest/AOI_V1/SystemSettingWindow/motion_settings.ini"
+  acs_config: "./Acs/config_1104.yaml"
+  acs_buffers_dir: "/home/aoi/pretest/acs_test/Buffer_single_new_aoi"
+  camera_working_dir: "/home/aoi/pretest/camera_test/ex_trigger/ex_trigger_command"
+  camera_executable: "/home/aoi/pretest/camera_test/ex_trigger/ex_trigger_command/external_trigger"
+  loftr_weights: "TemplateMatching/EfficientLoFTR/weights/eloftr_outdoor.ckpt"
+  log_file: "./Logger/aoi_system.log"
+  settings_ini: ".aoi_software_settings.ini"
+  material_data_json: "material_data.json"
+  scan_records_json: "scan_records.json"
+  remembered_credentials_json: "remembered_credentials.json"
+  database: "aoi_system.db"
+
+# ACS buffer 文件名映射
+acs_buffers:
+  x_home: "x_home_buffer_1.txt"
+  y_home: "y_home_buffer_2.txt"
+  z_home: "z_home_buffer_3.txt"
+  k2_home: "k2_home_buffer_5.txt"
+  init: "init_buffer_4.txt"
+  forward: "forward_buffer_0.txt"
+  backward: "backward_buffer_7.txt"
+  reset_k2: "reset_k2_buffer_9.txt"
+
+# PLC 寄存器地址 (线圈 coil / 保持寄存器 holding register 为独立地址空间)
+plc:
+  coils:
+    ready_status: 100        # 整机上电就绪
+    software_ready: 150      # 主控软件启动完成
+    alarm_reset: 151         # 报警复位
+    light_curtain: 200       # 光幕状态
+    start_signal: 201        # 启动信号
+    alarm_1: 250
+    alarm_2: 251
+    alarm_3: 252
+    alarm_4: 253
+    blower: 254              # 风机
+    vacuum: 255              # 吸真空
+    vacuum_release: 256      # 破真空
+  holding_registers:
+    light_source: 150        # 光源亮度
+    pressure: 200            # 负压 (float, 2 registers)
+    temperature: 202         # 温度 (float, 2 registers)
+    wetness: 204             # 湿度 (float, 2 registers)
+
+# 图像切分参数
+slicing:
+  dpi: 3250                  # Gerber 导出 DPI
+  step_mm: 120               # 相机移动步进 (mm)
+  margin_mm: 5.0             # 右侧首条带留白 (mm)
+  segment_mm: 128            # 相机视野对应长度 (mm)
+
+# 缩略图设置
+thumbnail:
+  scale_factor: 8            # 缩放因子
+  jpeg_quality: 80
+
+# 真空/风机控制
+vacuum:
+  blower_delay_seconds: 10   # 破真空后风机关闭延迟
+  time_interval_threshold: 300  # 风机启停时间间隔阈值 (秒)
+
+# 运动参数
+motion:
+  board_width_divisor: 127   # 板宽切分除数
+
+# 日志
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"

@@ -1,0 +1,20 @@
+{
+    "task": "detect",
+    "names": [
+        "open",
+        "short",
+        "copper",
+        "scratch",
+        "missing feature",
+        "mousebite",
+        "pinhole",
+        "stains",
+        "spur",
+        "shape defect"
+    ],
+    "imgsz": [
+        640,
+        640
+    ],
+    "half": true
+}

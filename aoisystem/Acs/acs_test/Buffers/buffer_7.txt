@@ -1,0 +1,74 @@
+
+! (M-NT) General Purpose PEG.prg
+! How to use general purpose outputs as PEG outputs:
+! This program assumes that PEG pulse output is sent through a
+! general purpose output that is routed to a general purpose 
+! input:
+! - Controller digital outputs are in 'sink' configuration
+! - Digital and Analog I/O connections:
+!   o V_SUP_IO <-- (resistive load) --> OUT2
+!   o OUT2 <--> IN0
+! 
+! Click on the 'Show Messages' button in the Communication
+! Terminal to see the positions of the PEG pulses.
+
+!=================================================================
+! Variable declaration and definition ============================
+GLOBAL REAL ARR(6)
+ARR(0)=100;
+ARR(1)=150;
+ARR(2)=200;
+ARR(3)=250;
+ARR(4)=300;
+ARR(5)=350;
+
+GLOBAL REAL ARR4(6)
+ARR4(0)=210;
+ARR4(1)=310;
+!ARR4(2)=410;
+!ARR4(3)=510;
+!ARR4(4)=610;
+!ARR4(5)=710;
+GLOBAL INT STAT(6)
+STAT(0)=0b0000
+STAT(1)=0b0000
+STAT(2)=0b0000
+STAT(3)=0b0000
+STAT(4)=0b0000
+STAT(5)=0b0000
+!=================================================================
+! Set motion parameters ==========================================
+DISABLE (AXIS_1)                ! Disable axis before setting params
+VEL(AXIS_1)=50                                       ! Set velocity
+ACC(AXIS_1) = 10*VEL(AXIS_1)                        ! Set acceleration
+DEC(AXIS_1) = 10*VEL(AXIS_1)                        ! Set deceleration
+JERK(AXIS_1) = 100*VEL(AXIS_1)                              ! Set jerk
+KDEC(AXIS_1) = 100*VEL(AXIS_1)                 ! Set kill deceleration
+
+!=================================================================
+! Motion and PEG activation ======================================
+ENABLE (AXIS_1)                                        ! Enable axis
+
+CYCLE:                                                     ! Label
+peg_r AXIS_0,0.3,0x4444,0,5,ARR,STAT
+peg_r AXIS_4,0.3,0x4444,0,1,ARR,STAT
+
+!PEG_I (AXIS_0), 1, 10, 10, 500
+!PEG_I (AXIS_4), 1, 10, 10, 500
+STARTPEG AXIS_0
+STARTPEG AXIS_4
+! Activate incremental PEG:
+!  - 1: PEG pulse width of 1 ms
+!  - 1: first point
+!  - 1: increment
+!  - 10: last point
+
+! Wait until PEG engine is ready before executing motion
+TILL AST(AXIS_0).#PEGREADY
+TILL AST(AXIS_4).#PEGREADY
+PTP/E (AXIS_1), 700                                        ! Move to 10
+STOPPEG (AXIS_0)      ! Prevent PEG pulses firing on the 'way back'
+STOPPEG (AXIS_4)
+PTP/E (AXIS_1), 0                                          ! Move to 0
+GOTO CYCLE                                        ! Repeat process
+STOP

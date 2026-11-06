@@ -1,0 +1,90 @@
+ZHOME:
+! The program executes the following sequence:
+! - Move to the left limit switch.
+! - Wait for the left limit release 
+! - Move to the encoder index.
+! - Set the AXIS_2 origin to the position of index.
+! - Move to the origin. 
+
+!********************************************************************************
+real Search_Vel
+INT bCompensate
+bCompensate=0
+
+MFLAGS (AXIS_2).#DEFCON  =1
+Search_Vel = 2;
+GLOBAL REAL AXIS_2_ERR( 17 )
+AXIS_2_ERR(0)=	0
+AXIS_2_ERR(1)=	-0.001075
+AXIS_2_ERR(2)=	-0.00165
+AXIS_2_ERR(3)=	-0.001675
+AXIS_2_ERR(4)=	-0.001675
+AXIS_2_ERR(5)=	-0.002375
+AXIS_2_ERR(6)=	-0.0029
+AXIS_2_ERR(7)=	-0.003025
+AXIS_2_ERR(8)=	-0.002775
+AXIS_2_ERR(9)=	-0.00235
+AXIS_2_ERR(10)=	-0.002475
+AXIS_2_ERR(11)=	-0.00335
+AXIS_2_ERR(12)=	-0.004475
+AXIS_2_ERR(13)=	-0.004925
+AXIS_2_ERR(14)=	-0.00505
+AXIS_2_ERR(15)=	-0.0053
+AXIS_2_ERR(16)=	-0.0064
+
+
+
+!*******************************************************************
+! Set Motion parameters for homing 
+VEL(AXIS_2)= Search_Vel*2;
+ACC(AXIS_2) = 30*VEL(AXIS_2); 
+DEC(AXIS_2) = ACC(AXIS_2);
+JERK(AXIS_2) = 10*ACC(AXIS_2); 
+KDEC(AXIS_2) = 500;
+!*******************************************************************
+FDEF(AXIS_2).#LL=0;       ! Disable the AXIS_2 left limit default response
+FDEF(AXIS_2).#RL=0;       ! Disable the AXIS_2 right limit default response
+FDEF(AXIS_2).#SRL=0; 
+FDEF(AXIS_2).#SLL=0; 
+!*******************************************************************
+MFLAGS(AXIS_2).#DEFCON=1   
+DISABLE (AXIS_2)
+TILL ^MST(AXIS_2).#ENABLED
+WAIT 100
+ENABLE (AXIS_2);         ! Enable the AXIS_2 drive
+TILL MST(AXIS_2).#ENABLED;
+WAIT 200;
+
+JOG (AXIS_2),-;           ! Move to the left limit switch 
+TILL FAULT(AXIS_2).#LL ! Wait for the   limit switch activation
+KILL AXIS_2
+TILL ^MST(AXIS_2).#MOVE
+VEL(AXIS_2)= Search_Vel
+IST(AXIS_2).#IND=1
+IST(AXIS_2).#IND=0;       ! Reset the index flag - activate index circuit
+JOG (AXIS_2),+;           ! Move to the encoder index
+
+TILL IST(AXIS_2).#IND;     ! Wait for crossing the index
+WAIT 100
+SET FPOS(AXIS_2)=FPOS(AXIS_2)-IND(AXIS_2)+5;  ! Set AXIS_2 origin to the position of index = zero
+PTP/E (AXIS_2),0;   ! Move to the origin
+TILL ^MST(AXIS_2).#MOVE          
+
+FMASK(AXIS_2).#RL=1;
+FMASK(AXIS_2).#LL=1; 
+FDEF(AXIS_2).#RL=1;      ! Enable the AXIS_2 right limit default response
+FDEF(AXIS_2).#LL=1;      ! Enable the AXIS_2 left limit default response
+
+IF ( bCompensate )
+MFLAGS (AXIS_2).#DEFCON  = 0 ; 
+CONNECT RPOS (AXIS_2) = APOS(AXIS_2)+ MAP ( APOS(AXIS_2),AXIS_2_ERR, 0, 1 );
+DEPENDS (AXIS_2), (AXIS_2) ;
+END
+
+VEL(AXIS_2)= 10;
+ACC(AXIS_2) = 400; 
+DEC(AXIS_2) = 400;
+JERK(AXIS_2) = 3000; 
+KDEC(AXIS_2) = 3000;
+
+STOP

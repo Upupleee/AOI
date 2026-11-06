@@ -1,0 +1,111 @@
+!K1 HOME
+K1HOME:
+
+WAIT 1000
+real Search_Vel
+INT bCompensate
+MFLAGS (AXIS_3).#DEFCON  =1
+Search_Vel = 10;
+
+bCompensate=1
+GLOBAL REAL AXIS_3_ERR( 26 )
+AXIS_3_ERR(0)=	0.00000 
+AXIS_3_ERR(1)=	0.00259 
+AXIS_3_ERR(2)=	0.00740 
+AXIS_3_ERR(3)=	0.00699 
+AXIS_3_ERR(4)=	0.00480 
+AXIS_3_ERR(5)=	0.01282 
+AXIS_3_ERR(6)=	0.011 
+AXIS_3_ERR(7)=	0.012 
+AXIS_3_ERR(8)=	0.011
+AXIS_3_ERR(9)=	0.009
+AXIS_3_ERR(10)=	0.013
+AXIS_3_ERR(11)=	0.010
+AXIS_3_ERR(12)=	0.010
+AXIS_3_ERR(13)=	0.005
+AXIS_3_ERR(14)=	0.006
+AXIS_3_ERR(15)=	0.016
+AXIS_3_ERR(16)=	0.017
+AXIS_3_ERR(17)=	0.023 
+AXIS_3_ERR(18)=	0.017
+AXIS_3_ERR(19)=	0.019
+AXIS_3_ERR(20)=	0.023 
+AXIS_3_ERR(21)=	0.031
+AXIS_3_ERR(22)=	0.034
+AXIS_3_ERR(23)=	0.024
+AXIS_3_ERR(24)=	0.034
+AXIS_3_ERR(25)=	0.032
+				
+
+MFLAGS(AXIS_3).#ENMOD = 1
+ENTIME(AXIS_3) = 3
+MFLAGS(AXIS_3).#OPEN=1
+CERRI(AXIS_3) = 100
+WAIT 1000
+DISABLE (AXIS_3)
+TILL ^MST(AXIS_3).#ENABLED
+WAIT 1000
+ENABLE (AXIS_3)
+TILL MST(AXIS_3).#ENABLED
+WAIT 8000
+
+MFLAGS(AXIS_3).#OPEN=0
+CERRI(AXIS_3) = 3
+
+!*******************************************************************
+! Set Motion parameters for homing 
+VEL(AXIS_3)= Search_Vel*2;
+ACC(AXIS_3) = 50*VEL(AXIS_3); 
+DEC(AXIS_3) = ACC(AXIS_3);
+JERK(AXIS_3) = 10*ACC(AXIS_3); 
+KDEC(AXIS_3) = 1000;
+!*******************************************************************
+FDEF(AXIS_3).#LL=0;       ! Disable the AXIS_0 left limit default response
+FDEF(AXIS_3).#RL=0;       ! Disable the AXIS_0 right limit default response
+FDEF(AXIS_3).#SRL=0; 
+FDEF(AXIS_3).#SLL=0; 
+!*******************************************************************
+MFLAGS(AXIS_3).#DEFCON=1   
+DISABLE (AXIS_3)
+TILL ^MST(AXIS_3).#ENABLED
+WAIT 1000
+ENABLE (AXIS_3);         ! Enable the AXIS_0 drive
+TILL MST(AXIS_3).#ENABLED;
+WAIT 2000;
+
+JOG (AXIS_3),-;           ! Move to the left limit switch 
+TILL FAULT(AXIS_3).#LL ! Wait for the   limit switch activation
+KILL AXIS_3
+TILL ^MST(AXIS_3).#MOVE
+VEL(AXIS_3)= Search_Vel
+IST(AXIS_3).#IND=1
+IST(AXIS_3).#IND=0;       ! Reset the index flag - activate index circuit
+JOG (AXIS_3),+;           ! Move to the encoder index
+
+TILL IST(AXIS_3).#IND;     ! Wait for crossing the index
+WAIT 100
+SET FPOS(AXIS_3)=FPOS(AXIS_3)-IND(AXIS_3)+7.5;  ! Set AXIS_0 origin to the position of index = zero
+PTP/E (AXIS_3),0;   ! Move to the origin
+TILL ^MST(AXIS_3).#MOVE          
+
+FMASK(AXIS_3).#RL=1;
+FMASK(AXIS_3).#LL=1; 
+FDEF(AXIS_3).#SRL=200; 
+FDEF(AXIS_3).#SLL=0;
+FDEF(AXIS_3).#RL=1;      ! Enable the AXIS_0 right limit default response
+FDEF(AXIS_3).#LL=1;      ! Enable the AXIS_0 left limit default response
+
+IF ( bCompensate )
+MFLAGS (AXIS_3).#DEFCON  = 0 ; 
+CONNECT RPOS (AXIS_3) = APOS(AXIS_3)+ MAP ( APOS(AXIS_3),AXIS_3_ERR, 0, 20 );
+DEPENDS (AXIS_3), (AXIS_3) ;
+END
+
+
+VEL(AXIS_3)= 300;
+ACC(AXIS_3) = 4000; 
+DEC(AXIS_3) = 4000;
+JERK(AXIS_3) = 10000; 
+KDEC(AXIS_3) = 10000;
+
+STOP

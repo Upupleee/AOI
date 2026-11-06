@@ -1,0 +1,15 @@
+GLOBAL INT AXIS9
+AXIS9 = 1
+VEL(AXIS9) = 100         ! 同样速度
+DISABLE(AXIS9)
+ENABLE(AXIS9)
+SET RPOS(AXIS9) = 1000   ! 从目标位置 1000 开始
+
+! 触发 PEG 信号，采集同一采集区间
+PEG_I 0, 0.5, 5, 1, 1000    ! 此命令用于触发 PEG 信号；参数与 Buffer_A 保持一致
+TILL AST(0).#PEGREADY      ! 等待 PEG 信号就绪
+
+PTP/E AXIS9, 0         ! 从目标位置返回到起点 0
+WAIT 1000              ! 延时等待运动稳定
+
+STOP                   ! 程序结束

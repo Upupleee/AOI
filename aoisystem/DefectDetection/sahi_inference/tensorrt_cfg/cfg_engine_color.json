@@ -1,0 +1,12 @@
+{
+    "task": "detect",
+    "names": [
+        "open",
+        "close"
+    ],
+    "imgsz": [
+        320,
+        320
+    ],
+    "half": true
+}

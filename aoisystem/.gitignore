@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# PyQt/PySide 生成文件
+*_ui.py
+
+# 日志文件
+*.log
+
+# 运行时数据
+material_data.json
+scan_records.json
+remembered_credentials.json
+material/
+
+# 测试/覆盖率
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# Trae 临时文件
+.trae-html-share-packages/

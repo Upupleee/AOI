@@ -1,0 +1,30 @@
+int axis
+axis =0
+VEL(axis)=50
+ACC(axis)=1000
+DEC(axis)=1000
+JERK(axis)=10000
+
+!ptp axis, 0
+WAIT 3500
+
+loop 1
+
+loop 10
+ptp/er axis,10
+wait 3500
+end
+
+
+wait 3500
+
+loop 10 
+ptp/er axis,-10
+wait 3500
+end
+
+
+end
+
+
+stop

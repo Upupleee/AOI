@@ -1,0 +1,144 @@
+! SpiiPlus Commutation Startup Program
+! Date: 15/1/09 
+! Program version: 6.5
+! Author: Boaz Kramer   
+! Retrieve Commutation Phase at a Detent Point.
+!
+! The following text provides a suggested commutation startup program. 
+! It is recommended to use it as a part of the homing process.
+! The user needs to customize the program, add safety checks and  test
+!   before the program can be included in the application.
+!
+! Program clears bits 1,4,5,6 of MFLAGS and sets bit 8 of MFLAGS.
+!
+! Program moves motor away from limit switch, if activated during the process.
+!
+! If the program finishes :
+!   1. Bit 9 of the variable MFLAGS is set (commutation OK).
+!   2. Motor is left disabled (change if necessary)
+! 
+! If the program fails:
+!   1. Bit 9 of the variable MFLAGS is cleared (commutation not OK).
+!   2. Motor is left disabled.
+!
+! Program variable SP_Fail_Code is set according to the following:
+! SP_Fail_Code=0 Program finished.
+! SP_Fail_Code=1 Motor error (If occurs, check MERR variable)
+! SP_Fail_Code=4 Unable to get out of the limit switch.
+!
+! The program changes the following motion variables:
+!   VEL, ACC, DEC, KDEC, JERK.
+! Make sure to change them back to your default motion parameters 
+!   at the end of the program.
+!
+!*******************************************************************************
+! PROGRAM VARIABLES
+!
+! All the variables used by the program start with "SP_".
+!
+! Input variables:
+
+int  SP_Axis                      ! Axis to be commutated
+real SP_Direction                 ! Search direction 
+real SP_Settle_Time               ! Settling time at Detent Points [msec]
+real SP_Search_Vel                ! Search velocity [user-units/sec]
+real SP_Drive                     ! Actuating drive command [% of maximum]
+real SP_Max_Search                ! Maximum search distance [user-units]
+real SP_Init_Offset               ! Initial commutation offset [elec. degrees]
+
+SP_Axis = 5          
+SP_Drive = 40          
+SP_Settle_Time = 1000    
+SP_Search_Vel  = 6         
+SP_Init_Offset = 0
+SP_Direction =  -1
+SP_Max_Search = 240
+
+!   Output varibale:
+int  SP_Fail_Code                 ! Faiure Code of the startup program
+
+! Auxiliary variable:
+real SP_Pitch                     ! Magnetic pitch [180 elec.deg. in user units]
+
+! State Flag
+int  SP_InCommutationStartup      ! Flag indicating commutation startup is in progress
+
+
+SP_Pitch=SLCPRD(SP_Axis)/SLCNP(SP_Axis)*EFAC(SP_Axis)
+
+
+!******************************************************************************* 
+! INITIALIZE
+FCLEAR(SP_Axis)   
+disable(SP_Axis)                     
+SETCONF(216,SP_Axis,0)                ! Reset commutation state
+setconf(214,SP_Axis,SP_Init_Offset)   ! Set initial commutation phase
+SP_Fail_Code=0                        ! Reset failure
+SP_Direction=1                        ! Move in positive direction
+SP_InCommutationStartup=1             ! commutation startup in progress
+!******************************************************************************* 
+! SET MOTION PROFILE FOR COMMUTATION STARTUP PROCESS 
+!
+!   WARNING: The following are the suggested motion parameters for the startup
+!     process. Check that the values are suitable for your application.
+
+ACC(SP_Axis)=SP_Search_Vel*10.; DEC(SP_Axis)=SP_Search_Vel*10. 
+KDEC(SP_Axis)=SP_Search_Vel*50.; JERK(SP_Axis)=SP_Search_Vel*100.
+
+!******************************************************************************* 
+! STEP 1 - MOVE TO FIRST DETENT POINT 
+!
+! WARNING: The motor moves to a detent point by jump. 
+!   The jump distance is up to one magnetic pitch in any direction.
+!   The motor jumps to the closest detent point within its motion range.
+!   If necessary modify initial detent point by changing the variable 
+!     SP_Init_Offset between 0-360 electrical degrees.  
+disp ""
+disp "...Commutation Startup Program Running..."
+enable(SP_Axis)
+while (DCOM(SP_Axis)+0.05 < SP_Drive); DCOM(SP_Axis) = DCOM(SP_Axis) + 0.05; end
+DCOM(SP_Axis) = SP_Drive
+wait SP_Settle_Time
+call Limit_Check
+!******************************************************************************* 
+! STEP 2 - MOVE TO SECOND DETENT POINT
+!
+!   The program moves the motor 90 electrical degrees in order to eliminate
+!      a state of unstable equilibrium.
+
+Move_Detent:
+ptp/rv (SP_Axis), SP_Direction*SP_Pitch/2.,SP_Search_Vel
+till ^AST(SP_Axis).#MOVE; wait SP_Settle_Time
+call Limit_Check
+disable(SP_Axis)
+
+MFLAGS(SP_Axis).9=1               ! Set commutation state 
+DCOM(SP_Axis) = 0
+
+! If motor is to be left enabled after startup process delete the following line:
+
+Finish:
+SP_InCommutationStartup=0              ! commutation startup is finished
+If SP_Fail_Code=0; disp "   Commutation Startup Finished."
+else disp "   Commutation Startup Failed."; disp "   Failure Code = %i",SP_Fail_Code; end
+STOP
+
+!******************************************************************************* 
+!   The following routine move the motor away from limit switches 
+
+Limit_Check:
+if MERR(SP_Axis) & MERR(SP_Axis)<>5010 & MERR(SP_Axis)<>5011; SP_Fail_Code=1; DISABLE(SP_Axis); DCOM(SP_Axis)=0; goto Finish; end
+!   if MERR(SP_Axis); SP_Fail_Code=1; DISABLE(SP_Axis); DCOM(SP_Axis)=0; goto Finish; end 
+if (FAULT(SP_Axis).#LL)|(FAULT(SP_Axis).#RL)
+   if FAULT(SP_Axis).#LL; SP_Direction=1; else SP_Direction=-1; end
+   ptp/rv (SP_Axis), SP_Direction*SP_Max_Search, SP_Search_Vel 
+   till ((^FAULT(SP_Axis).#LL)&(^FAULT(SP_Axis).#RL))|(^AST(SP_Axis).#MOVE)
+   if (FAULT(SP_Axis).#LL)|(FAULT(SP_Axis).#RL); SP_Fail_Code=4; DISABLE(SP_Axis); DCOM(SP_Axis)=0; goto Finish; end 
+   kill(SP_Axis);  wait SP_Settle_Time; goto Move_Detent
+end
+ret
+
+ON ((SP_InCommutationStartup = 1) & ((FAULT(SP_Axis)&0x30f80)>0 | (S_FAULT&0x30000000)>0))
+SP_Fail_Code=1; DISABLE(SP_Axis); DCOM(SP_Axis)=0
+CALL Finish 
+RET
